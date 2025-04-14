@@ -1,0 +1,89 @@
+= `advanced_auditing`
+:doctype: article
+:toc: left
+:toclevels: 3
+:sectnums:
+:source-highlighter: rouge
+:icons: font
+:csv-dir: ./.assets/advanced_auditing
+
+// Define attributes for table column widths and options
+:table-cols: "25a,35m,40a" // Adjust percentages/types (a=asciidoc, m=monospace) as needed
+:table-opts: header, CsvFormat
+
+== Overview
+
+=== What is an Advanced Auditing Rule?
+
+An *Advanced Auditing Rule* is a specific configuration within the Advanced Audit Policy framework that defines which events should be audited, how they should be logged, and under what conditions. These rules enable administrators to tailor auditing to meet the unique security and compliance needs of their organization.
+
+By setting up advanced auditing rules, you can track activities such as:
+
+*   *Object Access:* Monitor access to files, folders, and other system objects.
+*   *Privilege Use:* Track the use of sensitive privileges, such as administrative rights.
+*   *Policy Changes:* Audit changes to security policies and system configurations.
+*   *System Events:* Log events related to system startups, shutdowns, and other critical operations.
+
+=== Understanding GUIDs in Advanced Auditing
+
+In the context of Windows Group Policy and Advanced Auditing, *GUIDs (Globally Unique Identifiers)* are unique identifiers assigned to each audit policy setting. These GUIDs are used internally by Windows to reference specific policies within the Group Policy Object (GPO) framework.
+
+== `advanced_auditing` method
+
+=== How It Works
+
+// TODO: Content for How It Works
+
+=== Actions
+
+// TODO: Content for Actions
+
+
+== GUIDs list
+
+[TIP]
+====
+Advanced auditing settings for each rule/subcategory can be found in `gpedit.msc` under:
+`Computer Configuration` -> `Policies` -> `Windows Settings` -> `Security Settings` -> `[Category]` -> `Audit: [subcategory name]`
+====
+
+=== Categories
+
+==== Account Logon
+
+[%header, format=csv, cols={table-cols}]
+|===
+include::{csv-dir}/account-logon-guids.csv[]
+|===
+
+==== Account Management
+
+[%header, format=csv, cols={table-cols}]
+|===
+include::{csv-dir}/account-management-guids.csv[]
+|===
+
+==== Detailed Tracking
+
+[%header, format=csv, cols={table-cols}]
+|===
+include::{csv-dir}/detailed-tracking-guids.csv[]
+|===
+
+==== DS Access
+
+[%header, format=csv, cols={table-cols}]
+|===
+include::{csv-dir}/ds-access-guids.csv[]
+|===
+
+==== Logon/Logoff
+
+[%header, format=csv, cols={table-cols}]
+|===
+include::{csv-dir}/logon-logoff-guids.csv[]
+|===
+
+'''
+// Footnote Definitions
+footnote:guid_ref[[[MS-GPAC^]: Subcategory and SubcategoryGUID^] link:https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-gpac/77878370-0712-47cd-997d-b07053429f6d[Microsoft Learn]]

@@ -14,7 +14,7 @@ The project is inspired by tools like **HardeningKitty**, **LGPO**, and other se
 
 **PROMÉTHÉE** is the French name for **Prometheus**, the Titan from Greek mythology who gifted fire (knowledge) to humanity.
 
-- The acronym stands for **P**roactively **R**einforcing **O**ur **M**icrosoft-Windows **E**nvironments **T**hrough **H**ardening, **E**xtensible **E**valuations (Rust-based).
+- The acronym stands for **P**roactively **R**einforcing **O**ur **M**icrosoft-Windows **E**nvironments **T**hrough **H**ardening, **E**xtensible **E**valuations.
 - This name embodies the project’s mission to help administrators show and assess what security an air-gapped (or off-domain) computer is configured with.
 
 ## Key Advantages Over HardeningKitty
