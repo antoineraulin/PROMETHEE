@@ -1,11 +1,11 @@
-"Subcategory name","GUID","Purpose"
-"Application Group Management","`{0CCE9239-69AE-11D9-BED3-505054503030}` footnoteref:[guid_ref]","Generates events for actions related to link:https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc771579(v=ws.11)[application groups], such as group creation, modification, addition or removal of group member and some other actions."
-"Computer Account Management","`{0CCE9236-69AE-11D9-BED3-505054503030}` footnoteref:[guid_ref]","Determines whether the operating system generates audit events when a computer account is created, changed, or deleted.
+"Subcategory name","GUID{fn-guids}","Purpose"
+"Application Group Management","`{0CCE9239-69AE-11D9-BED3-505054503030}`","Generates events for actions related to link:https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc771579(v=ws.11)[application groups], such as group creation, modification, addition or removal of group member and some other actions."
+"Computer Account Management","`{0CCE9236-69AE-11D9-BED3-505054503030}`","Determines whether the operating system generates audit events when a computer account is created, changed, or deleted.
 
 This policy setting is useful for tracking account-related changes to computers that are members of a domain."
-"Distribution Group Management","`{0CCE9238-69AE-11D9-BED3-505054503030}` footnoteref:[guid_ref]","Determines whether the operating system generates audit events for specific distribution-group management tasks.
+"Distribution Group Management","`{0CCE9238-69AE-11D9-BED3-505054503030}`","Determines whether the operating system generates audit events for specific distribution-group management tasks.
 
 This subcategory generates events only on domain controllers."
-"Other Account Management Events","`{0CCE923A-69AE-11D9-BED3-505054503030}` footnoteref:[guid_ref]","Determines whether the operating system generates user account management audit events."
-"Security Group Management","`{0CCE9237-69AE-11D9-BED3-505054503030}` footnoteref:[guid_ref]","Determines whether the operating system generates audit events when specific security group management tasks are performed."
-"User Account Management","`{0CCE9235-69AE-11D9-BED3-505054503030}` footnoteref:[guid_ref]","Determines whether the operating system generates audit events when specific user account management tasks are performed."
+"Other Account Management Events","`{0CCE923A-69AE-11D9-BED3-505054503030}`","Determines whether the operating system generates user account management audit events."
+"Security Group Management","`{0CCE9237-69AE-11D9-BED3-505054503030}`","Determines whether the operating system generates audit events when specific security group management tasks are performed."
+"User Account Management","`{0CCE9235-69AE-11D9-BED3-505054503030}`","Determines whether the operating system generates audit events when specific user account management tasks are performed."

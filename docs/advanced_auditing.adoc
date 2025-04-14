@@ -6,6 +6,7 @@
 :source-highlighter: rouge
 :icons: font
 :csv-dir: ./.assets/advanced_auditing
+:fn-guids: footnote:guide_ref[https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-gpac/77878370-0712-47cd-997d-b07053429f6d[Subcategory and SubcategoryGUID | Microsoft Learn]]
 
 // Define attributes for table column widths and options
 :table-cols: "25a,35m,40a" // Adjust percentages/types (a=asciidoc, m=monospace) as needed
@@ -86,4 +87,3 @@ include::{csv-dir}/logon-logoff-guids.csv[]
 
 '''
 // Footnote Definitions
-footnote:guid_ref[[[MS-GPAC^]: Subcategory and SubcategoryGUID^] link:https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-gpac/77878370-0712-47cd-997d-b07053429f6d[Microsoft Learn]]
