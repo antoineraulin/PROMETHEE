@@ -86,6 +86,7 @@ include::{csv-dir}/logon-logoff-guids.csv[]
 |===
 
 Doc dir : {docdir}
+Doc file: {docfile}
 
 '''
 // Footnote Definitions
