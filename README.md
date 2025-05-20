@@ -36,6 +36,7 @@ The project is inspired by tools like **HardeningKitty**, **LGPO**, and other se
 
 ### Roadmap
 
+- [ ] [PRIORITY] Support `[Service General Setting]` Scope in `secedit` (Note: Currently the secedit method doesn't support this scope because its fields don't follow the official ini format - there's no '=' between the field key and configuration value. If this scope exists on the machine, the secedit method crashes completely)
 - [ ] Implement rules filtering
 - [ ] Add raw `registry.pol`, `GptTmpl.inf`, `audit.csv` and `lgpo.txt` files in backup
 
