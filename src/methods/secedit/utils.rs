@@ -153,7 +153,44 @@ pub fn value_to_registry_action(value: &str) -> R<lgpo::Action> {
             Ok(lgpo::Action::Dword(num))
         }
         "7" => {
-            let values = value.split(',').map(|v| v.to_string()).collect();
+            let mut values = Vec::new();
+            let mut current = String::new();
+            let mut in_quotes = false;
+            let mut chars = value.chars().peekable();
+            
+            while let Some(ch) = chars.next() {
+                match ch {
+                    '"' => {
+                        if in_quotes && chars.peek() == Some(&'"') {
+                            // Escaped quote
+                            chars.next();
+                            current.push('"');
+                        } else {
+                            in_quotes = !in_quotes;
+                        }
+                    }
+                    ',' if !in_quotes => {
+                        // Handle special case for empty lines (" ")
+                        let trimmed_current = current.trim();
+                        if trimmed_current == " " {
+                            values.push(String::new());
+                        } else {
+                            values.push(current);
+                        }
+                        current = String::new();
+                    }
+                    _ => current.push(ch),
+                }
+            }
+            
+            // Add the last value
+            let trimmed_current = current.trim();
+            if trimmed_current == " " {
+                values.push(String::new());
+            } else {
+                values.push(current);
+            }
+            
             Ok(lgpo::Action::MultiSz(values))
         }
         "-NODATA-" => Ok(lgpo::Action::Delete),
@@ -171,7 +208,24 @@ pub fn registry_action_to_value(action: &lgpo::Action) -> R<String> {
             Ok(format!("3,{}", num))
         }
         lgpo::Action::Dword(num) => Ok(format!("4,{}", num)),
-        lgpo::Action::MultiSz(values) => Ok(format!("7,{}", values.join(","))),
+        lgpo::Action::MultiSz(values) => {
+            let formatted_values: Vec<String> = values
+                .iter()
+                .map(|v| {
+                    if v.is_empty() {
+                        // Empty lines are represented as " " (quote-space-quote)
+                        "\" \"".to_string()
+                    } else if v.contains(',') || v.contains('"') {
+                        // Lines with commas or quotes need to be quoted and quotes escaped
+                        format!("\"{}\"", v.replace('"', "\"\""))
+                    } else {
+                        // Simple lines without commas or quotes
+                        v.clone()
+                    }
+                })
+                .collect();
+            Ok(format!("7,{}", formatted_values.join(",")))
+        }
         lgpo::Action::Delete => Ok("-NODATA-".to_string()),
         _ => Err("Unsupported action type".into()),
     }
