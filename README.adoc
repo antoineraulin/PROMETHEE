@@ -2,7 +2,7 @@
 
 :author: Antoine Raulin
 
-== +++<img src="logo.svg" alt="Logo" style="height: 1.5em; vertical-align: middle;">+++ {app-name}
+== +++<img src="logo.svg" alt="Logo" width="24px">+++ {app-name}
 
 
 === Introduction
