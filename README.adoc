@@ -2,6 +2,20 @@
 
 :author: Antoine Raulin
 
+ifdef::env-github[]
+++++
+<div align="center">
+
+<h3>ℹ️ Repository Notice</h3>
+<p><strong>This is a mirror repository.</strong></p>
+<p>The primary repository is hosted on <strong><a href="https://git.araul.in/antoine/PROMETHEE">GitLab</a></strong>.</p>
+<p>For issues, pull requests, discussions, and all other contributions,<br>
+please visit the <strong><a href="https://git.araul.in/antoine/PROMETHEE">main repository on GitLab</a></strong>.</p>
+</div>
+<br>
+++++
+endif::[]
+
 == +++<img src="logo.svg" alt="Logo" height="20em">+++ {app-name}
 
 
