@@ -2,10 +2,10 @@
 
 :author: Antoine Raulin
 
-= {app-name}
+== +++<img src="logo.svg" alt="Logo" style="height: 1.5em; vertical-align: middle;">+++ {app-name}
 
 
-== Introduction
+=== Introduction
 
 *{app-name}* is a Windows hardening tool written in Rust, designed to apply security configurations defined in a CSV-based “rules” file.
 
@@ -16,7 +16,7 @@
 The project is inspired by tools like *HardeningKitty*, *LGPO*, and other security frameworks, but aims to be *faster*, *more efficient*, and *extensible*.
 
 
-== Why “PROMÉTHÉE”?
+=== Why “PROMÉTHÉE”?
 
 *PROMÉTHÉE* is the French name for *Prometheus*, the Titan from Greek mythology who gifted fire (knowledge) to humanity.
 
@@ -24,7 +24,7 @@ The project is inspired by tools like *HardeningKitty*, *LGPO*, and other securi
 - This name embodies the project’s mission to help administrators show and assess what security an air-gapped (or off-domain) computer is configured with.
 
 
-== Key Advantages Over HardeningKitty
+=== Key Advantages Over HardeningKitty
 
 - *Purpose-Built for Hardening*:  
    HardeningKitty’s main focus was (and still is) *assessing* compliance. It recently introduced an *“apply”* mode, but it can sometimes be error-prone due to its secondary nature. *{app-name}*, by contrast, is built from the ground up with a focus on **applying** security configurations effectively, while providing compliance checks as a secondary feature.
@@ -32,7 +32,7 @@ The project is inspired by tools like *HardeningKitty*, *LGPO*, and other securi
    HardeningKitty typically edits *registry keys* or uses *raw secedit* commands, and those changes are mostly visible only in raw files. *{app-name}* extensively uses *LGPO* to directly edit Local Policies. As a result, the changes are immediately visible in *gpedit.msc*, making them much easier to review and update *manually* if needed. This approach leads to a more robust and maintainable security stance.
 
 
-== Features
+=== Features
 
 - *CSV-Driven Rules*: Easily define or modify security policies in a CSV file.
 - *Multiple Modes*:
@@ -43,13 +43,14 @@ The project is inspired by tools like *HardeningKitty*, *LGPO*, and other securi
 - *Rust-Powered*: Offers strong performance, reliability, and memory safety.
 
 
-== Roadmap
+=== Roadmap
 
+* [ ] *PRIORITY* Support `[Service General Setting]` Scope in `secedit` (Note: Currently the secedit method doesn't support this scope because its fields don't follow the official ini format - there's no '=' between the field key and configuration value. If this scope exists on the machine, the secedit method crashes completely)
 * [ ] Implement rules filtering
 * [ ] Add raw `registry.pol`, `GptTmpl.inf`, `audit.csv` and `lgpo.txt` files in backup
 
 
-== Rules CSV format
+=== Rules CSV format
 
 The Rules CSV file consists of the following columns:
 
@@ -65,12 +66,12 @@ The Rules CSV file consists of the following columns:
 - `tags`: Tags to filter rules.
 
 
-=== Available Methods
+==== Available Methods
 
 For detailed information on each method, please refer to the link:wiki[Wiki].
 
 
-=== Example
+==== Example
 
 Here's an example of how the `rules.csv` might look:
 
