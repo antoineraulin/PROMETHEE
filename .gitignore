@@ -35,3 +35,6 @@ tmp.cmd
 
 # deepwork session state
 .slim/deepwork/
+
+# offline ruby/gem installers (build deps, not source)
+*.deb

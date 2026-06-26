@@ -1,0 +1,78 @@
+extends: default
+
+# PROMÉTHÉE documentation theme.
+# ponytail: uses system DejaVu fonts (full glyph coverage) instead of the
+# bundled Noto subsets, which lacked curly apostrophes (U+2019) and rendered
+# them as tofu rectangles in tables. No title page / no logo per request.
+
+font:
+  catalog:
+    DejaVu Sans:
+      normal: /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf
+      bold: /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
+      italic: /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf
+      bold_italic: /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
+    DejaVu Sans Mono:
+      normal: /usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf
+      bold: /usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf
+      italic: /usr/share/fonts/truetype/dejavu/DejaVuSansMono-Oblique.ttf
+      bold_italic: /usr/share/fonts/truetype/dejavu/DejaVuSansMono-BoldOblique.ttf
+
+base:
+  font_family: DejaVu Sans
+  font_size: 9.5
+  font_color: 222222
+
+codespan:
+  font_family: DejaVu Sans Mono
+
+link:
+  font_color: 0592F8
+
+heading:
+  font_family: DejaVu Sans
+  h1_font_color: 0067B0
+  h2_font_color: 0067B0
+  h3_font_color: 09AEFF
+
+table:
+  border_color: D0D7DE
+  border_width: 0.5
+  head:
+    background_color: 0067B0
+    font_color: FFFFFF
+    font_style: bold
+  body:
+    stripe_background_color: F4F6F8
+
+code:
+  background_color: F4F6F8
+  border_color: D0D7DE
+  border_width: 0.5
+  font_family: DejaVu Sans Mono
+
+header:
+  height: 0.55in
+  border_color: D0D7DE
+  border_width: 0.25
+  vertical_align: middle
+  recto:
+    right:
+      content: '{document-title}'
+  verso:
+    left:
+      content: '{document-title}'
+
+footer:
+  border_color: D0D7DE
+  border_width: 0.25
+  recto:
+    left:
+      content: 'PROMÉTHÉE'
+    right:
+      content: '{page-number}'
+  verso:
+    left:
+      content: '{page-number}'
+    right:
+      content: 'PROMÉTHÉE'
