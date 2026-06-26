@@ -29,3 +29,9 @@ Cargo.lock
 program.log
 tmp.cmd
 /data
+
+# submodule
+/wiki
+
+# deepwork session state
+.slim/deepwork/

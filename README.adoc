@@ -6,7 +6,7 @@ ifdef::env-github[]
 ++++
 <div align="center">
 
-<h3>ℹ️ Repository Notice</h3>
+<h3>Repository Notice</h3>
 <p><strong>This is a mirror repository.</strong></p>
 <p>The primary repository is hosted on <strong><a href="https://git.araul.in/antoine/PROMETHEE">GitLab</a></strong>.</p>
 <p>For issues, pull requests, discussions, and all other contributions,<br>
@@ -19,89 +19,82 @@ endif::[]
 == +++<img src="logo.svg" alt="Logo" height="20em">+++ {app-name}
 
 
-=== Introduction
+=== Overview
 
-*{app-name}* is a Windows hardening tool written in Rust, designed to apply security configurations defined in a CSV-based “rules” file.
+*{app-name}* is a Windows hardening tool written in Rust. It reads a CSV file of rules and applies the corresponding security configurations to a machine, and backs up the existing configuration before changing anything. Administrators use it to bring an air-gapped or off-domain Windows host to a known security state, and to prove that state afterwards.
 
-- It can *assess* whether a system is compliant with specified hardening rules.
-- It can *backup* existing Windows settings so you have a fallback if something goes wrong.
-- It can *harden* the operating system by applying the rules outlined in a CSV file.
+The project is named after Prometheus, the Titan who brought fire to humanity in Greek mythology. The reference is deliberate: the goal is to give administrators clear control over the security posture of the machines they manage.
 
-The project is inspired by tools like *HardeningKitty*, *LGPO*, and other security frameworks, but aims to be *faster*, *more efficient*, and *extensible*.
+The tool runs in three modes. `apply` enforces the rules from a CSV file on the local system. `backup` exports the current configuration described by those same rules into a CSV file, so a previous state can be restored later. `audit` compares the live system against the rules and produces a compliance score, optionally written to a report file.
 
 
-=== Why “PROMÉTHÉE”?
+=== Why it exists
 
-*PROMÉTHÉE* is the French name for *Prometheus*, the Titan from Greek mythology who gifted fire (knowledge) to humanity.
+Most existing Windows hardening tooling was built to *assess* compliance, not to *enforce* it. HardeningKitty, for example, is primarily an auditing tool; its apply mode came later and can be fragile because enforcement was never its core concern. {app-name} was built the other way around: applying configurations is the primary job, auditing is a secondary feature that uses the same rule definitions.
 
-- The acronym stands for **P**roactively **R**einforcing **O**ur **M**icrosoft-Windows **E**nvironments **T**hrough **H**ardening, **E**xtensible **E**valuations (Rust-based).
-- This name embodies the project’s mission to help administrators show and assess what security an air-gapped (or off-domain) computer is configured with.
-
-
-=== Key Advantages Over HardeningKitty
-
-- *Purpose-Built for Hardening*:  
-   HardeningKitty’s main focus was (and still is) *assessing* compliance. It recently introduced an *“apply”* mode, but it can sometimes be error-prone due to its secondary nature. *{app-name}*, by contrast, is built from the ground up with a focus on **applying** security configurations effectively, while providing compliance checks as a secondary feature.
-- *Extensive Use of LGPO*:  
-   HardeningKitty typically edits *registry keys* or uses *raw secedit* commands, and those changes are mostly visible only in raw files. *{app-name}* extensively uses *LGPO* to directly edit Local Policies. As a result, the changes are immediately visible in *gpedit.msc*, making them much easier to review and update *manually* if needed. This approach leads to a more robust and maintainable security stance.
+The second difference is how it writes policy. Tools of this kind often edit registry keys directly or run raw `secedit` commands, which leaves the changes scattered across files that are hard to review. {app-name} relies on LGPO to edit Local Policies directly. Every change it makes is immediately visible in `gpedit.msc` and can be inspected or reverted by hand, so the hardened state stays reviewable.
 
 
-=== Features
+=== Usage
 
-- *CSV-Driven Rules*: Easily define or modify security policies in a CSV file.
-- *Multiple Modes*:
-  - *Assess*: Check how many settings on the current system comply with your CSV-based security rules.
-  - *Backup*: Save the current security configuration before applying changes.
-  - *Harden*: Apply secure configurations to Windows using Rust for speed and memory safety.
-- *Modular & Extensible*: You can add new methods (e.g., remove .exe files, add firewall rules, tweak registry settings, etc.) without heavy refactoring.
-- *Rust-Powered*: Offers strong performance, reliability, and memory safety.
+{app-name} runs on Windows and must be run from an elevated (administrator) prompt. Build it with `cargo build --release` or use a prebuilt binary, then invoke the desired subcommand. The `apply` mode creates a System Restore Point before changing anything unless you pass `--skip-restore-point`.
 
+----
+# Apply the rules in rules.csv to this machine
+promethee apply -c rules.csv
 
-=== Roadmap
+# Back up the current configuration described by rules.csv to backup.csv
+promethee backup -c rules.csv -o backup.csv
 
-* [ ] *PRIORITY* Support `[Service General Setting]` Scope in `secedit` (Note: Currently the secedit method doesn't support this scope because its fields don't follow the official ini format - there's no '=' between the field key and configuration value. If this scope exists on the machine, the secedit method crashes completely)
-* [ ] Implement rules filtering
-* [ ] Add raw `registry.pol`, `GptTmpl.inf`, `audit.csv` and `lgpo.txt` files in backup
+# Audit this machine against rules.csv and write a report
+promethee audit -c rules.csv --report --report-file report.csv
+----
 
-
-=== Rules CSV format
-
-The Rules CSV file consists of the following columns:
-
-- `id`: Unique identifier for the rule.
-- `name`: Name of the rule.
-- `category`: Category for console printing purposes.
-- `method`: Method to apply the rule.
-- `target`: Target of the method.
-- `option1`: First option parameter.
-- `option2`: Second option parameter.
-- `scope`: Scope of the method.
-- `action`: Action to perform.
-- `tags`: Tags to filter rules.
+Increase output detail with repeated `-v` flags, or reduce it with `-q`. File logging is available through `--log` together with `--log-file`.
 
 
-==== Available Methods
+=== Rules format
 
-For detailed information on each method, please refer to the link:wiki[Wiki].
+Hardening rules are defined in a CSV file. Each row is one rule, described by the following columns:
 
+- *id*: stable identifier for the rule.
+- *name*: human-readable name.
+- *category*: grouping used for console output.
+- *method*: how the rule is applied (see the link:wiki[Wiki] for the full list and per-method semantics).
+- *target*: what the method acts on.
+- *option1*, *option2*: method-specific parameters.
+- *scope*: scope the method operates in.
+- *action*: what to do.
+- *tags*: comma-separated tags for filtering.
+
+The available methods include local policy via LGPO, `secedit`, advanced audit policy, Windows services, AppX packages, Windows optional features, Windows capabilities, the Windows Firewall, local users and groups, and Software Restriction Policies (SAFER). Refer to the link:wiki[Wiki] for details on each.
 
 ==== Example
 
-Here's an example of how the `rules.csv` might look:
-
+A few representative rows showing distinct method and scope shapes:
 
 [cols="10*", options="header"]
-|=================================================================================================================================================================================================================================================================================================================================================
-| id  | name                                                              | category                                                     | method                   | target                                                      | option1          | option2                            | scope        | action              | tags             
-| R01 | Disable WorkFolder-Client                                         | Installation > Features                                      | windows_optional_feature | WorkFolder-Client                                           |                  |                                    |              | enable              | feature          
-| R02 | Remove Cortana App                                                | Installation > UWP Apps                                      | appx_package             | Microsoft.Windows.Cortana                                   |                  |                                    |              | remove              | apps             
-| R03 | Enable Password Complexity                                        | Security Settings > Accounts                                 | secedit                  | PasswordComplexity                                          |                  |                                    | systemaccess | 1                   | security         
-| R04 | Configure 'audit security groups management' to Success & Failure | Advanced audit strategies configuration > Account login      | advanced_auditing        | {0CCE9237-69AE-11D9-BED3-505054503030}                      |                  |                                    |              | success_and_failure | audits           
-| R05 | Forbidding execution of 'Get Office'                              | Legitimate process control mechanisms > Software restriction | safer                    | %programfiles%\WindowsApps\Microsoft.MicrosoftOfficeHub\\\* | disallowed       | Forbidding execution of Get Office | Paths        | exists              | apps             
-| R06 | Disable the 'Allow telemetry' rule                                | Configuring GPO computer settings > Windows components       | lgpo                     | Software\Policies\Microsoft\Windows\DataCollection          | AllowTelemetry   |                                    | computer     | DWORD:0             | telemetry        
-| R07 | Disable the 'IP Support (iphlpsvc)' service                       | Services                                                     | service                  | iphlpsvc                                                    |                  |                                    |              | disabled            | services         
-| R08 | Create group 'sample_app Users'                                   | Extra > Local groups                                         | local_group              | sample_app Users                                            | S-1-5-32-544     |                                    |              | exist               | sample_app,groups
-| R09 | Create user 'sample_app tester'                                   | Extra > Local users                                          | local_user               | sample_app tester                                           | sample_app Users |                                    |              | exist               | sample_app,users 
-|=================================================================================================================================================================================================================================================================================================================================================
+|========================================================================================================================================================================
+| id  | name                                                              | category                                                | method            | target                                                 | option1        | option2                            | scope        | action              | tags
+| R03 | Enable Password Complexity                                        | Security Settings > Accounts                           | secedit           | PasswordComplexity                                     |                |                                    | systemaccess | 1                   | security
+| R04 | Configure 'audit security groups management' to Success & Failure | Advanced audit strategies configuration > Account login | advanced_auditing | {0CCE9237-69AE-11D9-BED3-505054503030}                 |                |                                    |              | success_and_failure | audits
+| R06 | Disable the 'Allow telemetry' rule                                | Configuring GPO computer settings > Windows components | lgpo              | Software\Policies\Microsoft\Windows\DataCollection     | AllowTelemetry |                                    | computer     | DWORD:0             | telemetry
+| R07 | Disable the 'IP Support (iphlpsvc)' service                       | Services                                               | service           | iphlpsvc                                               |                |                                    |              | disabled            | services
+|========================================================================================================================================================================
+
+
+=== Status
+
+The tool is usable for its core purpose, with a few items still outstanding:
+
+* [ ] Support the `[Service General Setting]` scope in `secedit`. The current method cannot parse this scope — its fields don't follow the official INI format (no `=` between key and value) — and fails when it is present.
+* [ ] Rule filtering by tag.
+* [ ] Include raw `registry.pol`, `GptTmpl.inf`, `audit.csv` and `lgpo.txt` files in backups.
+
+
+=== License
+
+{app-name} is licensed under link:https://creativecommons.org/licenses/by-nc-sa/4.0/[Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International] (CC BY-NC-SA 4.0). This is a non-commercial license: you may use, share, and adapt the work, but not for commercial purposes. Derivative works must use the same license and give appropriate credit. Review the full text before relying on it, particularly if you intend to use the tool in a commercial context.
+
 
 link:https://git.araul.in/antoine/PROMETHEE[PROMÉTHÉE] © 2025 by link:https://git.araul.in/antoine[Antoine Raulin] is licensed under link:https://creativecommons.org/licenses/by-nc-sa/4.0/[CC BY-NC-SA 4.0] image:https://mirrors.creativecommons.org/presskit/icons/cc.svg[CC,16,16] image:https://mirrors.creativecommons.org/presskit/icons/by.svg[BY,16,16] image:https://mirrors.creativecommons.org/presskit/icons/nc.svg[NC,16,16] image:https://mirrors.creativecommons.org/presskit/icons/sa.svg[SA,16,16]
