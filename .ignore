@@ -1,0 +1,3 @@
+# unignore deepwork session state for OpenCode tooling
+!.slim/deepwork/
+!.slim/deepwork/**
